@@ -1,0 +1,71 @@
+# Build directories
+build/
+cmake-build-*/
+.cmake/
+
+# Conan files
+conandata.txt
+conaninfo.txt
+conanbuildinfo.*
+conan.lock
+graph_info.json
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compiled binaries
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+
+# Object files
+*.o
+*.obj
+
+# Archive files
+*.a
+*.lib
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Coverage files
+*.gcno
+*.gcda
+*.gcov
+coverage.info
+coverage_html/
+lcov.info
+
+# Test results
+test_results/
+Testing/
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Generated documentation
+docs/html/
+docs/latex/
+
+# Package files
+*.tar.gz
+*.zip

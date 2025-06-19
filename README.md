@@ -5,7 +5,7 @@ A high-performance C++ implementation of the Boundary Element Method (BEM) for s
 ## Features
 
 - **Modern C++20** implementation with SOLID principles
-- **High-performance linear algebra** using Armadillo with OpenBLAS/MKL backend
+- **High-performance linear algebra** using Eigen3
 - **Flexible boundary conditions** (Dirichlet, Neumann, Robin)
 - **Multiple integration strategies** (Gauss quadrature, adaptive integration)
 - **Comprehensive test suite** with GoogleTest

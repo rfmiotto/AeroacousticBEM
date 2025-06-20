@@ -1,0 +1,156 @@
+aeroacoustic-bem/
+├── CMakeLists.txt
+├── conanfile.py
+├── README.md
+├── .gitignore
+├── .clang-format
+├── .clang-tidy
+│
+├── src/                          # Source code
+│   ├── main.cpp                  # Application entry point
+│   │
+│   ├── application/              # Application layer
+│   │   ├── cli/
+│   │   │   ├── CommandLineParser.hpp
+│   │   │   └── CommandLineParser.cpp
+│   │   ├── config/
+│   │   │   ├── Configuration.hpp
+│   │   │   └── Configuration.cpp
+│   │   └── App.hpp
+│   │   └── App.cpp
+│   │
+│   ├── domain/                   # Domain layer (core business logic)
+│   │   ├── bem/
+│   │   │   ├── BEMSolver.hpp
+│   │   │   ├── BEMSolver.cpp
+│   │   │   ├── HelmholtzBEMSolver.hpp
+│   │   │   ├── HelmholtzBEMSolver.cpp
+│   │   │   ├── SystemMatrix.hpp
+│   │   │   └── SystemMatrix.cpp
+│   │   │
+│   │   ├── geometry/
+│   │   │   ├── Point2D.hpp
+│   │   │   ├── BoundaryElement.hpp
+│   │   │   ├── BoundaryElement.cpp
+│   │   │   ├── Mesh.hpp
+│   │   │   └── Mesh.cpp
+│   │   │
+│   │   ├── physics/
+│   │   │   ├── HelmholtzProblem.hpp
+│   │   │   ├── HelmholtzProblem.cpp
+│   │   │   ├── AcousticField.hpp
+│   │   │   ├── AcousticField.cpp
+│   │   │   └── GreensFunctions.hpp
+│   │   │   └── GreensFunctions.cpp
+│   │   │
+│   │   ├── boundary_conditions/
+│   │   │   ├── BoundaryCondition.hpp
+│   │   │   ├── DirichletBC.hpp
+│   │   │   ├── DirichletBC.cpp
+│   │   │   ├── NeumannBC.hpp
+│   │   │   ├── NeumannBC.cpp
+│   │   │   ├── RobinBC.hpp
+│   │   │   ├── RobinBC.cpp
+│   │   │   └── BoundaryConditionFactory.hpp
+│   │   │   └── BoundaryConditionFactory.cpp
+│   │   │
+│   │   └── integration/
+│   │       ├── IntegrationStrategy.hpp
+│   │       ├── GaussQuadrature.hpp
+│   │       ├── GaussQuadrature.cpp
+│   │       ├── AdaptiveQuadrature.hpp
+│   │       ├── AdaptiveQuadrature.cpp
+│   │       └── SingularIntegration.hpp
+│   │       └── SingularIntegration.cpp
+│   │
+│   ├── infrastructure/           # Infrastructure layer
+│   │   ├── linear_algebra/
+│   │   │   ├── LinearAlgebraBackend.hpp
+│   │   │   ├── ArmadilloBackend.hpp
+│   │   │   ├── ArmadilloBackend.cpp
+│   │   │   ├── LinearSolver.hpp
+│   │   │   ├── DirectSolver.hpp
+│   │   │   ├── DirectSolver.cpp
+│   │   │   ├── IterativeSolver.hpp
+│   │   │   └── IterativeSolver.cpp
+│   │   │
+│   │   ├── io/
+│   │   │   ├── MeshReader.hpp
+│   │   │   ├── GmshReader.hpp
+│   │   │   ├── GmshReader.cpp
+│   │   │   ├── ResultWriter.hpp
+│   │   │   ├── VTKWriter.hpp
+│   │   │   ├── VTKWriter.cpp
+│   │   │   └── CSVWriter.hpp
+│   │   │   └── CSVWriter.cpp
+│   │   │
+│   │   ├── logging/
+│   │   │   ├── Logger.hpp
+│   │   │   ├── Logger.cpp
+│   │   │   └── ProgressObserver.hpp
+│   │   │
+│   │   └── memory/
+│   │       ├── MemoryPool.hpp
+│   │       └── MemoryPool.cpp
+│   │
+│   └── foundation/               # Foundation layer
+│       ├── types/
+│       │   ├── ComplexTypes.hpp
+│       │   ├── GeometryTypes.hpp
+│       │   └── BEMTypes.hpp
+│       │
+│       ├── exceptions/
+│       │   ├── BEMException.hpp
+│       │   └── BEMException.cpp
+│       │
+│       └── utils/
+│           ├── Constants.hpp
+│           ├── MathUtils.hpp
+│           ├── MathUtils.cpp
+│           └── StringUtils.hpp
+│           └── StringUtils.cpp
+│
+├── tests/                        # Test suite
+│   ├── CMakeLists.txt
+│   ├── main_test.cpp
+│   │
+│   ├── unit/                     # Unit tests
+│   │   ├── domain/
+│   │   │   ├── test_BoundaryElement.cpp
+│   │   │   ├── test_Mesh.cpp
+│   │   │   ├── test_HelmholtzProblem.cpp
+│   │   │   └── test_BoundaryConditions.cpp
+│   │   │
+│   │   ├── infrastructure/
+│   │   │   ├── test_LinearAlgebra.cpp
+│   │   │   ├── test_Integration.cpp
+│   │   │   └── test_IO.cpp
+│   │   │
+│   │   └── foundation/
+│   │       └── test_MathUtils.cpp
+│   │
+│   ├── integration/              # Integration tests
+│   │   ├── test_BEMSolver.cpp
+│   │   └── test_EndToEnd.cpp
+│   │
+│   └── fixtures/                 # Test data
+│       ├── meshes/
+│       ├── reference_solutions/
+│       └── config_files/
+│
+├── examples/                     # Example programs
+│   ├── simple_scattering/
+│   ├── airfoil_analysis/
+│   └── validation_cases/
+│
+├── docs/                         # Documentation
+│   ├── api/
+│   ├── tutorials/
+│   └── theory/
+│
+├── scripts/                      # Build and utility scripts
+│   ├── build.sh
+│   ├── test.sh
+│   └── format.sh
+│
+└── external/                     # Third-party dependencies (if needed

@@ -58,5 +58,7 @@ ln -sf "$BUILD_DIR/compile_commands.json" ./compile_commands.json
 # Optional: Run tests if they exist and were built
 if [[ -d "tests" ]] || [[ -f "CTestTestfile.cmake" ]]; then
   echo "🧪 Running tests..."
+  pushd "$BUILD_DIR" >/dev/null
   ctest --build-config "$BUILD_TYPE" --output-on-failure
+  popd >/dev/null
 fi

@@ -16,7 +16,9 @@ echo "🔧 Building AeroacousticBEM in $BUILD_TYPE mode..."
 # fi
 
 # Only configure once (unless CMakeLists.txt or dependencies change)
-if [[ ! -f "$BUILD_DIR/CMakeCache.txt" ]]; then
+if [[ ! -f "$BUILD_DIR/CMakeCache.txt" ||
+  CMakeLists.txt -nt "$BUILD_DIR/CMakeCache.txt" ||
+  conanfile.* -nt "$BUILD_DIR/CMakeCache.txt" ]]; then
 
   # Install dependencies with Conan from the project root
   echo "📦 Installing dependencies with Conan..."

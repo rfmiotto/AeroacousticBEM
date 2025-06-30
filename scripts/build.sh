@@ -7,13 +7,15 @@ BUILD_TYPE=${1:-Release}
 CONAN_PROFILE=${2:-default}
 BUILD_DIR="build/$BUILD_TYPE"
 
-echo "🔧 Building AeroacousticBEM in $BUILD_TYPE mode..."
-
 # Clean up previous build if it exists
-# if [[ -d "build" ]]; then
-#   echo "🧹 Cleaning previous build directory..."
-#   rm -rf "$BUILD_DIR"
-# fi
+if [[ "$1" == "clean" ]]; then
+  echo "🧹 Cleaning build directory..."
+  rm -rf "$BUILD_DIR"
+  echo "✅ Build directory was removed successfully!"
+  exit 0
+fi
+
+echo "🔧 Building AeroacousticBEM in $BUILD_TYPE mode..."
 
 # Only configure once (unless CMakeLists.txt or dependencies change)
 if [[ ! -f "$BUILD_DIR/CMakeCache.txt" ||

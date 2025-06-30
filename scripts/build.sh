@@ -2,6 +2,13 @@
 
 set -e
 
+# Help support
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: ./build.sh [BuildType] [ConanProfile] [clean]"
+  echo "Defaults: BuildType=Release, Profile=default"
+  exit 0
+fi
+
 # Default to Release if no argument is provided
 BUILD_TYPE=${1:-Release}
 CONAN_PROFILE=${2:-default}

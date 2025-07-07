@@ -77,12 +77,4 @@ struct Vector2D {
   }
 };
 
-// Element identification
-using ElementId = std::size_t;
-using NodeId = std::size_t;
-
-// Frequency domain
-using Frequency = Real;
-using WaveNumber = Real;
-
 } // namespace bem::types

@@ -81,13 +81,13 @@ target_link_libraries(bem_foundation PUBLIC
 # )
 
 # Domain library
-# file(GLOB_RECURSE DOMAIN_SOURCES "src/domain/*.cpp")
-# add_library(bem_domain STATIC ${DOMAIN_SOURCES})
-# target_link_libraries(bem_domain PUBLIC
-#     bem_foundation
-#     bem_infrastructure
-#     Eigen3::Eigen
-# )
+file(GLOB_RECURSE DOMAIN_SOURCES "src/domain/*.cpp")
+add_library(bem_domain STATIC ${DOMAIN_SOURCES})
+target_link_libraries(bem_domain PUBLIC
+    bem_foundation
+    #    bem_infrastructure
+    Eigen3::Eigen
+)
 
 # Application library
 # file(GLOB_RECURSE APPLICATION_SOURCES "src/application/*.cpp")

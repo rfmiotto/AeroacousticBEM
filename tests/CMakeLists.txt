@@ -14,7 +14,7 @@ add_executable(run_tests
 
 target_link_libraries(run_tests PRIVATE
     # bem_application
-    # bem_domain
+    bem_domain
     # bem_infrastructure
     bem_foundation
     GTest::gtest

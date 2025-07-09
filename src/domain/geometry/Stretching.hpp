@@ -49,7 +49,9 @@ public:
    *
    * @throws std::invalid_argument if xEnd <= xBeg or numPoints < 2.
    */
-  StretchingFunction(double xBeg, double xEnd, int numPoints,
+  StretchingFunction(double xBeg,
+                     double xEnd,
+                     int numPoints,
                      const StretchingParams &params = StretchingParams{})
       : paramP_(params.paramP), paramQ_(params.paramQ), xBeg_(xBeg),
         xEnd_(xEnd), numPoints_(numPoints) {

@@ -20,7 +20,8 @@ struct LineSegment {
   SegmentRegion region = SegmentRegion::UPSTREAM; // default initialization
 
   LineSegment() = default;
-  LineSegment(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {}
+  LineSegment(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {
+  }
 
   [[nodiscard]] Real length() const;
   [[nodiscard]] Point2D midpoint() const;

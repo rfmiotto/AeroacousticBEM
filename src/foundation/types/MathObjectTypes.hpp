@@ -26,7 +26,8 @@ struct Point2D {
   Real y{0.0};
 
   Point2D() = default;
-  Point2D(Real x_val, Real y_val) : x(x_val), y(y_val) {}
+  Point2D(Real x_val, Real y_val) : x(x_val), y(y_val) {
+  }
 
   // Arithmetic operations
   Point2D operator+(const Point2D &other) const {
@@ -37,9 +38,13 @@ struct Point2D {
     return {x - other.x, y - other.y};
   }
 
-  Point2D operator*(Real scalar) const { return {x * scalar, y * scalar}; }
+  Point2D operator*(Real scalar) const {
+    return {x * scalar, y * scalar};
+  }
 
-  Point2D operator/(Real scalar) const { return {x / scalar, y / scalar}; }
+  Point2D operator/(Real scalar) const {
+    return {x / scalar, y / scalar};
+  }
 
   // Comparison operators
   bool operator==(const Point2D &other) const;
@@ -52,9 +57,11 @@ struct Vector2D {
   Real y{0.0};
 
   Vector2D() = default;
-  Vector2D(Real x_val, Real y_val) : x(x_val), y(y_val) {}
+  Vector2D(Real x_val, Real y_val) : x(x_val), y(y_val) {
+  }
   Vector2D(const Point2D &from, const Point2D &to)
-      : x(to.x - from.x), y(to.y - from.y) {}
+      : x(to.x - from.x), y(to.y - from.y) {
+  }
 
   // Vector operations
   [[nodiscard]] Real dot(const Vector2D &other) const {
@@ -65,7 +72,9 @@ struct Vector2D {
     return (x * other.y) - (y * other.x);
   }
 
-  [[nodiscard]] Real magnitude() const { return std::sqrt((x * x) + (y * y)); }
+  [[nodiscard]] Real magnitude() const {
+    return std::sqrt((x * x) + (y * y));
+  }
 
   [[nodiscard]] Vector2D normalized() const {
     Real mag = magnitude();

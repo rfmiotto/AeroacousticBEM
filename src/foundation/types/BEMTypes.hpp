@@ -40,7 +40,8 @@ struct QuadraturePoint {
 
   QuadraturePoint() = default;
   QuadraturePoint(Real xi_val, Real weight_val, const Point2D &point_val)
-      : xi(xi_val), weight(weight_val), point(point_val) {}
+      : xi(xi_val), weight(weight_val), point(point_val) {
+  }
 };
 
 // Solver parameters
@@ -58,7 +59,8 @@ struct SystemMatrixEntry {
   Complex value;
 
   SystemMatrixEntry(ElementId r, ElementId c, Complex v)
-      : row(r), col(c), value(v) {}
+      : row(r), col(c), value(v) {
+  }
 };
 
 // Problem parameters
@@ -75,7 +77,8 @@ struct FieldPoint {
   Vector2D velocity; // v = ∇φ (as complex components)
 
   FieldPoint() = default;
-  explicit FieldPoint(const Point2D &loc) : location(loc) {}
+  explicit FieldPoint(const Point2D &loc) : location(loc) {
+  }
 };
 
 } // namespace bem::types

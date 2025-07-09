@@ -5,12 +5,14 @@ namespace bem::domain::geometry {
 using namespace bem::types;
 
 FlatPlate2D::FlatPlate2D(std::size_t nAirfoilSegments,
-                         std::size_t nVerticalSegments, Real thickness,
+                         std::size_t nVerticalSegments,
+                         Real thickness,
                          Real domainLength) {
   generatePlate(nAirfoilSegments, nVerticalSegments, thickness, domainLength);
 }
 void FlatPlate2D::generatePlate(std::size_t nAirfoil,
-                                std::size_t nVerticalSegments, Real thickness,
+                                std::size_t nVerticalSegments,
+                                Real thickness,
                                 Real domainLength) {
   if (domainLength <= 1.0) {
     throw std::invalid_argument("Domain length must be > 1.0 to include "

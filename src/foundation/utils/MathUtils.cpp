@@ -22,15 +22,21 @@ double angle(const types::Point2D &p1, const types::Point2D &p2) {
   return std::atan2(p2.y - p1.y, p2.x - p1.x);
 }
 
-bool isZero(double value, double tol) { return std::abs(value) < tol; }
+bool isZero(double value, double tol) {
+  return std::abs(value) < tol;
+}
 
 bool isEqual(double v1, double v2, double tol) {
   return std::abs(v1 - v2) < tol;
 }
 
-double magnitude(types::Complex z) { return std::abs(z); }
+double magnitude(types::Complex z) {
+  return std::abs(z);
+}
 
-double phase(types::Complex z) { return std::arg(z); }
+double phase(types::Complex z) {
+  return std::arg(z);
+}
 
 // std::pair<std::vector<double>, std::vector<double>>
 // gaussLegendreQuadrature(int n_points) {

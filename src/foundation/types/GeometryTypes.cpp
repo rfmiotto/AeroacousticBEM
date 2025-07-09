@@ -4,7 +4,9 @@
 namespace bem::types {
 using namespace bem::foundation::utils::MathUtils;
 
-Real LineSegment::length() const { return distance(start, end); }
+Real LineSegment::length() const {
+  return distance(start, end);
+}
 
 Point2D LineSegment::midpoint() const {
   return Point2D{0.5 * (start.x + end.x), 0.5 * (start.y + end.y)};
@@ -27,6 +29,8 @@ Point2D LineSegment::parametricPoint(Real xi) const {
 }
 
 // Jacobian for numerical integration in the [-1, 1] parametric domain
-Real LineSegment::jacobian() const { return 0.5 * length(); }
+Real LineSegment::jacobian() const {
+  return 0.5 * length();
+}
 
 } // namespace bem::types

@@ -21,7 +21,8 @@ struct BoundaryValue {
 
   BoundaryValue() = default;
   explicit BoundaryValue(Complex pot, bool pot_known = true)
-      : potential(pot), potential_known(pot_known) {}
+      : potential(pot), potential_known(pot_known) {
+  }
 };
 
 // Function types for boundary conditions

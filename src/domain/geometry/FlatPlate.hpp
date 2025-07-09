@@ -24,8 +24,10 @@ using bem::types::SegmentRegion;
  */
 class FlatPlate2D {
 public:
-  FlatPlate2D(std::size_t nAirfoilSegments, std::size_t nVerticalSegments,
-              Real thickness, Real domainLength);
+  FlatPlate2D(std::size_t nAirfoilSegments,
+              std::size_t nVerticalSegments,
+              Real thickness,
+              Real domainLength);
 
   [[nodiscard]] const std::vector<Point2D> &getPoints() const {
     return points_;
@@ -45,7 +47,8 @@ private:
   std::vector<SegmentRegion> taggedSegments_;
 
   void generatePlate(std::size_t nAirfoilSegments,
-                     std::size_t nVerticalSegments, Real thickness,
+                     std::size_t nVerticalSegments,
+                     Real thickness,
                      Real domainLength);
 };
 

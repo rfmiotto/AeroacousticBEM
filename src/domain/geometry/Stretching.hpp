@@ -88,6 +88,31 @@ public:
     return xnodes;
   }
 
+  /**
+   * @brief Generates the analytical derivatives of the node coordinates with
+   * respect to the normalized coordinate eta.
+   *
+   * @return A vector of derivatives dx/deta at each node.
+   */
+  [[nodiscard]] std::vector<double> generateNodeDerivatives() const {
+    std::vector<double> derivatives;
+    derivatives.reserve(numPoints_);
+
+    const double dx = xEnd_ - xBeg_;
+    const double tanhQ = std::tanh(paramQ_);
+
+    for (int i = 0; i < numPoints_; ++i) {
+      double eta = static_cast<double>(i) / (numPoints_ - 1);
+      double sechSquared = 1.0 - std::pow(std::tanh(paramQ_ * (1.0 - eta)), 2);
+      double ds_deta =
+          paramP_ + ((1.0 - paramP_) * paramQ_ * sechSquared / tanhQ);
+      double dx_deta = dx * ds_deta;
+      derivatives.push_back(dx_deta);
+    }
+
+    return derivatives;
+  }
+
 private:
   double paramP_; ///< Blending parameter (linear ↔ nonlinear)
   double paramQ_; ///< Stretching sharpness

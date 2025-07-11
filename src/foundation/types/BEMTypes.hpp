@@ -1,8 +1,13 @@
 #pragma once
 
 #include "MathObjectTypes.hpp"
+#include "foundation/utils/Constants.hpp"
 
 namespace bem::types {
+
+using types::Complex;
+using types::Real;
+namespace Constants = bem::foundation::utils::Constants;
 
 // Element identification
 using ElementId = std::size_t;
@@ -17,19 +22,23 @@ enum class ElementType : std::uint8_t {
 
 // Integration rule types
 enum class IntegrationType : std::uint8_t {
-  GAUSS,     // Gauss-Legendre quadrature
-  ADAPTIVE,  // Adaptive quadrature
-  ANALYTICAL // Analytical integration (when possible)
+  GAUSS,    // Gauss-Legendre quadrature
+  ADAPTIVE, // Adaptive quadrature
 };
 
 // Integration parameters
 struct IntegrationParameters {
   IntegrationType type{IntegrationType::GAUSS};
-  int order{8};              // Number of quadrature points
-  Real tolerance{1e-12};     // For adaptive integration
-  int max_subdivisions{100}; // For adaptive integration
-  bool use_singularity_treatment{true};
-  Real singularity_distance{1e-6}; // Distance threshold for singularity
+  int order{
+      Constants::DEFAULT_INTEGRATION_ORDER}; // Number of quadrature points
+  Real tolerance{Constants::INTEGRATION_TOLERANCE};          // For adaptive
+                                                             // integration
+  int max_subdivisions{Constants::DEFAULT_MAX_SUBDIVISIONS}; // For adaptive
+                                                             // integration
+  bool use_singularity_treatment{Constants::USE_SINGULARITY_TREATMENT};
+  Real singularity_distance{
+      Constants::SINGULARITY_DISTANCE_THRESHOLD}; // Distance threshold for
+                                                  // singularity
 };
 
 // Quadrature point

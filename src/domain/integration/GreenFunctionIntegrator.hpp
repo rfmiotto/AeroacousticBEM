@@ -15,7 +15,6 @@ using bem::domain::physics::greensFunctionNormalDerivative2D;
 using bem::foundation::exceptions::BEMException;
 using bem::foundation::utils::Constants::I_4;
 using bem::foundation::utils::Constants::PI;
-using bem::foundation::utils::Constants::SINGULARITY_DISTANCE_THRESHOLD;
 using bem::foundation::utils::MathUtils::distance;
 using bem::types::Complex;
 using bem::types::IntegrationParameters;

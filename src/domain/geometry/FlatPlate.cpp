@@ -4,14 +4,14 @@
 namespace bem::domain::geometry {
 using namespace bem::types;
 
-FlatPlate2D::FlatPlate2D(std::size_t nAirfoilSegments,
-                         std::size_t nVerticalSegments,
+FlatPlate2D::FlatPlate2D(std::size_t nAirfoilPanels,
+                         std::size_t nVerticalPanels,
                          Real thickness,
                          Real domainLength) {
-  generatePlate(nAirfoilSegments, nVerticalSegments, thickness, domainLength);
+  generatePlate(nAirfoilPanels, nVerticalPanels, thickness, domainLength);
 }
 void FlatPlate2D::generatePlate(std::size_t nAirfoil,
-                                std::size_t nVerticalSegments,
+                                std::size_t nVerticalPanels,
                                 Real thickness,
                                 Real domainLength) {
   if (domainLength <= 1.0) {
@@ -24,7 +24,7 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoil,
   if (thickness <= 0.0) {
     throw std::invalid_argument("Thickness must be positive.");
   }
-  if (nVerticalSegments < 1) {
+  if (nVerticalPanels < 1) {
     throw std::invalid_argument("nVerticalSegments must be >= 1.");
   }
 
@@ -37,11 +37,11 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoil,
   Real xEnd = 1.0 + (dx * static_cast<Real>(nUpDown));
   Real yBeg = -0.5 * thickness;
   Real yEnd = 0.5 * thickness;
-  Real dy = (yEnd - yBeg) / static_cast<Real>(nVerticalSegments);
+  Real dy = (yEnd - yBeg) / static_cast<Real>(nVerticalPanels);
 
   points_.clear();
-  segments_.clear();
-  taggedSegments_.clear();
+  panels_.clear();
+  taggedPanels_.clear();
 
   // 1. Top side: left → right
   for (std::size_t i = 0; i <= nx; ++i) {
@@ -50,7 +50,7 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoil,
   }
 
   // 2. Right side: top → bottom
-  for (std::size_t j = 1; j <= nVerticalSegments; ++j) {
+  for (std::size_t j = 1; j <= nVerticalPanels; ++j) {
     Real y = yEnd - (static_cast<Real>(j) * dy);
     points_.emplace_back(xEnd, y);
   }
@@ -62,7 +62,7 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoil,
   }
 
   // 4. Left side: bottom → top (excluding top-left corner)
-  for (std::size_t j = 1; j < nVerticalSegments; ++j) {
+  for (std::size_t j = 1; j < nVerticalPanels; ++j) {
     Real y = yBeg + (static_cast<Real>(j) * dy);
     points_.emplace_back(xBeg, y);
   }
@@ -72,19 +72,19 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoil,
   for (std::size_t i = 0; i < nPoints; ++i) {
     const auto &p1 = points_[i];
     const auto &p2 = points_[(i + 1) % nPoints]; // closed loop
-    LineSegment seg(p1, p2);
+    Panel seg(p1, p2);
 
     // Determine region
     Real mx = seg.midpoint().x;
     if (mx < 0.0) {
-      seg.region = SegmentRegion::UPSTREAM;
+      seg.region = PanelRegion::UPSTREAM;
     } else if (mx <= 1.0) {
-      seg.region = SegmentRegion::AIRFOIL;
+      seg.region = PanelRegion::AIRFOIL;
     } else {
-      seg.region = SegmentRegion::DOWNSTREAM;
+      seg.region = PanelRegion::DOWNSTREAM;
     }
 
-    segments_.push_back(seg);
+    panels_.push_back(seg);
   }
 }
 } // namespace bem::domain::geometry

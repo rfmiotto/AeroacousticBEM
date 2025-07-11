@@ -43,16 +43,16 @@ TEST(FlatPlate2DTest, CorrectRegionClassification) {
   Real domainLength = 7.0;
 
   FlatPlate2D plate(nAirfoil, nVertical, thickness, domainLength);
-  const auto &segments = plate.getSegments();
+  const auto &segments = plate.getPanels();
 
   for (const auto &seg : segments) {
     Real mx = seg.midpoint().x;
     if (mx < 0.0) {
-      EXPECT_EQ(seg.region, SegmentRegion::UPSTREAM);
+      EXPECT_EQ(seg.region, PanelRegion::UPSTREAM);
     } else if (mx <= 1.0) {
-      EXPECT_EQ(seg.region, SegmentRegion::AIRFOIL);
+      EXPECT_EQ(seg.region, PanelRegion::AIRFOIL);
     } else {
-      EXPECT_EQ(seg.region, SegmentRegion::DOWNSTREAM);
+      EXPECT_EQ(seg.region, PanelRegion::DOWNSTREAM);
     }
   }
 }
@@ -64,12 +64,12 @@ TEST(FlatPlate2DTest, AirfoilSpansFromZeroToOne) {
   Real domainLength = 4.0;
 
   FlatPlate2D plate(nAirfoil, nVertical, thickness, domainLength);
-  const auto &segments = plate.getSegments();
+  const auto &segments = plate.getPanels();
 
   namespace views = std::views;
 
   auto is_airfoil = [](const auto &seg) {
-    return seg.region == SegmentRegion::AIRFOIL;
+    return seg.region == PanelRegion::AIRFOIL;
   };
 
   auto extract_x_coords = [](const auto &seg) {

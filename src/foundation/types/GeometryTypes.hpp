@@ -7,20 +7,20 @@ namespace bem::types {
 /**
  * @brief Represents the physical region associated with a boundary segment.
  */
-enum class SegmentRegion : std::uint8_t {
+enum class PanelRegion : std::uint8_t {
   UPSTREAM,
   AIRFOIL,
   DOWNSTREAM,
 };
 
-// Line segment for boundary elements
-struct LineSegment {
+// Line segment (Panel) for boundary elements
+struct Panel {
   Point2D start;
   Point2D end;
-  SegmentRegion region = SegmentRegion::UPSTREAM; // default initialization
+  PanelRegion region = PanelRegion::UPSTREAM; // default initialization
 
-  LineSegment() = default;
-  LineSegment(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {
+  Panel() = default;
+  Panel(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {
   }
 
   [[nodiscard]] Real length() const;

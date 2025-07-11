@@ -18,7 +18,7 @@ using bem::foundation::utils::Constants::PI;
 using bem::foundation::utils::MathUtils::distance;
 using bem::types::Complex;
 using bem::types::IntegrationParameters;
-using bem::types::LineSegment;
+using bem::types::Panel;
 using bem::types::Point2D;
 using bem::types::Vector2D;
 
@@ -27,13 +27,13 @@ public:
   virtual ~IntegrationStrategy() = default;
 
   [[nodiscard]] virtual Complex
-  integrateGreen(const LineSegment &panel,
+  integrateGreen(const Panel &panel,
                  const Point2D &x,
                  double k,
                  const IntegrationParameters &params) const = 0;
 
   [[nodiscard]] virtual Complex
-  integrateNormalDerivative(const LineSegment &panel,
+  integrateNormalDerivative(const Panel &panel,
                             const Point2D &x,
                             const Vector2D &normal,
                             double k,
@@ -48,7 +48,7 @@ public:
   }
 
   [[nodiscard]] Complex
-  integrateGreen(const LineSegment &panel,
+  integrateGreen(const Panel &panel,
                  const Point2D &x,
                  double k,
                  const IntegrationParameters &params) const override {
@@ -65,7 +65,7 @@ public:
   }
 
   [[nodiscard]] Complex integrateNormalDerivative(
-      const LineSegment &panel,
+      const Panel &panel,
       const Point2D &x,
       const Vector2D &normal,
       double k,

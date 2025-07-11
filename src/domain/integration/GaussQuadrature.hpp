@@ -11,7 +11,7 @@ namespace bem::domain::integration {
 
 using bem::foundation::exceptions::BEMException;
 using bem::types::Complex;
-using bem::types::LineSegment;
+using bem::types::Panel;
 using bem::types::Point2D;
 using bem::types::QuadraturePoint;
 
@@ -31,8 +31,7 @@ public:
 
   // Integrate a function over a line segment using Gaussian quadrature
   template <typename Func>
-  [[nodiscard]] Complex integrate(const LineSegment &panel,
-                                  Func integrand) const {
+  [[nodiscard]] Complex integrate(const Panel &panel, Func integrand) const {
     Complex result(0.0, 0.0);
     double length = panel.length();
     for (const auto &point : points_) {

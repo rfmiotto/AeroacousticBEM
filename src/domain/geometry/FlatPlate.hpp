@@ -5,10 +5,10 @@
 
 namespace bem::domain::geometry {
 
-using bem::types::LineSegment;
+using bem::types::Panel;
+using bem::types::PanelRegion;
 using bem::types::Point2D;
 using bem::types::Real;
-using bem::types::SegmentRegion;
 
 /**
  * @brief Represents a 2D flat plate in a rectangular domain for boundary
@@ -24,8 +24,8 @@ using bem::types::SegmentRegion;
  */
 class FlatPlate2D {
 public:
-  FlatPlate2D(std::size_t nAirfoilSegments,
-              std::size_t nVerticalSegments,
+  FlatPlate2D(std::size_t nAirfoilPanels,
+              std::size_t nVerticalPanels,
               Real thickness,
               Real domainLength);
 
@@ -33,21 +33,21 @@ public:
     return points_;
   }
 
-  [[nodiscard]] const std::vector<LineSegment> &getSegments() const {
-    return segments_;
+  [[nodiscard]] const std::vector<Panel> &getPanels() const {
+    return panels_;
   }
 
-  [[nodiscard]] const std::vector<SegmentRegion> &getTaggedSegments() const {
-    return taggedSegments_;
+  [[nodiscard]] const std::vector<PanelRegion> &getTaggedPanels() const {
+    return taggedPanels_;
   }
 
 private:
   std::vector<Point2D> points_;
-  std::vector<LineSegment> segments_;
-  std::vector<SegmentRegion> taggedSegments_;
+  std::vector<Panel> panels_;
+  std::vector<PanelRegion> taggedPanels_;
 
-  void generatePlate(std::size_t nAirfoilSegments,
-                     std::size_t nVerticalSegments,
+  void generatePlate(std::size_t nAirfoilPanels,
+                     std::size_t nVerticalPanels,
                      Real thickness,
                      Real domainLength);
 };

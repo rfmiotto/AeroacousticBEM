@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MathObjectTypes.hpp"
+#include "foundation/utils/Constants.hpp"
 
 namespace bem::types {
 
@@ -29,6 +30,9 @@ struct Panel {
   [[nodiscard]] Vector2D normal() const;                // Outward normal
   [[nodiscard]] Point2D parametricPoint(Real xi) const; // xi ∈ [-1, 1]
   [[nodiscard]] Real jacobian() const;                  // For integration
+  [[nodiscard]] bool contains(
+      const Point2D &pt,
+      Real tol = bem::foundation::utils::Constants::GEOMETRY_TOLERANCE) const;
 };
 
 } // namespace bem::types

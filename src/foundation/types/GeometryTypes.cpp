@@ -33,4 +33,27 @@ Real Panel::jacobian() const {
   return 0.5 * length();
 }
 
+bool Panel::contains(const Point2D &pt, Real tol) const {
+  // Panel vector
+  const Real dx = end.x - start.x;
+  const Real dy = end.y - start.y;
+
+  // Vector from panel start to point
+  const Real dxp = pt.x - start.x;
+  const Real dyp = pt.y - start.y;
+
+  // If the cross product between these two vectors is not zero,
+  // it is not aligned → point is not on the line segment
+  const Real cross = (dx * dyp) - (dy * dxp);
+
+  if (std::abs(cross) > tol) {
+    return false;
+  }
+
+  // Dot produt to check if point is within panel extremes
+  const Real dot = (dx * dxp) + (dy * dyp);
+  const Real len2 = (dx * dx) + (dy * dy);
+
+  return (dot >= -tol) && (dot <= len2 + tol);
+}
 } // namespace bem::types

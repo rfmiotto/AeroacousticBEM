@@ -4,40 +4,40 @@
 namespace bem::domain::geometry {
 using namespace bem::types;
 
-FlatPlate2D::FlatPlate2D(std::size_t nAirfoilPanels,
-                         std::size_t nVerticalPanels,
+FlatPlate2D::FlatPlate2D(std::size_t nAirfoilElements,
+                         std::size_t nVerticalElements,
                          Real thickness,
                          Real domainLength) {
-  generatePlate(nAirfoilPanels, nVerticalPanels, thickness, domainLength);
+  generatePlate(nAirfoilElements, nVerticalElements, thickness, domainLength);
 }
-void FlatPlate2D::generatePlate(std::size_t nAirfoil,
-                                std::size_t nVerticalPanels,
+void FlatPlate2D::generatePlate(std::size_t nAirfoilElements,
+                                std::size_t nVerticalElements,
                                 Real thickness,
                                 Real domainLength) {
   if (domainLength <= 1.0) {
     throw std::invalid_argument("Domain length must be > 1.0 to include "
                                 "airfoil + upstream/downstream.");
   }
-  if (nAirfoil < 1) {
+  if (nAirfoilElements < 1) {
     throw std::invalid_argument("nAirfoil must be >= 1.");
   }
   if (thickness <= 0.0) {
     throw std::invalid_argument("Thickness must be positive.");
   }
-  if (nVerticalPanels < 1) {
+  if (nVerticalElements < 1) {
     throw std::invalid_argument("nVerticalSegments must be >= 1.");
   }
 
-  Real dx = 1.0 / static_cast<Real>(nAirfoil);
+  Real dx = 1.0 / static_cast<Real>(nAirfoilElements);
   auto nUpDown =
       static_cast<std::size_t>(std::round((domainLength - 1.0) / (2.0 * dx)));
 
-  std::size_t nx = (2 * nUpDown) + nAirfoil;
+  std::size_t nx = (2 * nUpDown) + nAirfoilElements;
   Real xBeg = -dx * static_cast<Real>(nUpDown);
   Real xEnd = 1.0 + (dx * static_cast<Real>(nUpDown));
   Real yBeg = -0.5 * thickness;
   Real yEnd = 0.5 * thickness;
-  Real dy = (yEnd - yBeg) / static_cast<Real>(nVerticalPanels);
+  Real dy = (yEnd - yBeg) / static_cast<Real>(nVerticalElements);
 
   points_.clear();
   panels_.clear();
@@ -50,7 +50,7 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoil,
   }
 
   // 2. Right side: top → bottom
-  for (std::size_t j = 1; j <= nVerticalPanels; ++j) {
+  for (std::size_t j = 1; j <= nVerticalElements; ++j) {
     Real y = yEnd - (static_cast<Real>(j) * dy);
     points_.emplace_back(xEnd, y);
   }
@@ -62,7 +62,7 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoil,
   }
 
   // 4. Left side: bottom → top (excluding top-left corner)
-  for (std::size_t j = 1; j < nVerticalPanels; ++j) {
+  for (std::size_t j = 1; j < nVerticalElements; ++j) {
     Real y = yBeg + (static_cast<Real>(j) * dy);
     points_.emplace_back(xBeg, y);
   }
@@ -72,16 +72,16 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoil,
   for (std::size_t i = 0; i < nPoints; ++i) {
     const auto &p1 = points_[i];
     const auto &p2 = points_[(i + 1) % nPoints]; // closed loop
-    Panel seg(p1, p2);
+    Element seg(p1, p2);
 
     // Determine region
     Real mx = seg.midpoint().x;
     if (mx < 0.0) {
-      seg.region = PanelRegion::UPSTREAM;
+      seg.region = ElementRegion::UPSTREAM;
     } else if (mx <= 1.0) {
-      seg.region = PanelRegion::AIRFOIL;
+      seg.region = ElementRegion::AIRFOIL;
     } else {
-      seg.region = PanelRegion::DOWNSTREAM;
+      seg.region = ElementRegion::DOWNSTREAM;
     }
 
     panels_.push_back(seg);

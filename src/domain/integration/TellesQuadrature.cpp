@@ -36,26 +36,26 @@ Real TellesQuadrature::tellesTransformDerivative(Real xi, Real xi_star) {
   return 1.0 + (3.0 * xi * (1.0 - std::abs(xi_star)));
 }
 
-Real TellesQuadrature::computeXiStar(const Panel &panel, const Point2D &x) {
-  Real dx = panel.end.x - panel.start.x;
-  Real dy = panel.end.y - panel.start.y;
+Real TellesQuadrature::computeXiStar(const Element &element, const Point2D &x) {
+  Real dx = element.end.x - element.start.x;
+  Real dy = element.end.y - element.start.y;
   Real length2 = (dx * dx) + (dy * dy);
   Real proj =
-      ((x.x - panel.start.x) * dx + (x.y - panel.start.y) * dy) / length2;
+      ((x.x - element.start.x) * dx + (x.y - element.start.y) * dy) / length2;
   return (2.0 * proj) - 1.0;
 }
 
 Complex TellesQuadrature::integrate(
-    const Panel &panel,
+    const Element &element,
     const std::function<Complex(const Point2D &)> &integrand) const {
   Complex result(0.0, 0.0);
-  Real xi_star = computeXiStar(panel, panel.midpoint());
-  const double jacobian = panel.jacobian();
+  Real xi_star = computeXiStar(element, element.midpoint());
+  const double jacobian = element.jacobian();
 
   for (const auto &qp : standard_points_) {
     Real phi = tellesTransform(qp.xi, xi_star);
     Real dphi_dxi = tellesTransformDerivative(qp.xi, xi_star);
-    Point2D y = panel.parametricPoint(phi);
+    Point2D y = element.parametricPoint(phi);
     Real weight = qp.weight * dphi_dxi;
     result += weight * integrand(y) * jacobian;
   }

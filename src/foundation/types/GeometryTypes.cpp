@@ -4,41 +4,41 @@
 namespace bem::types {
 using namespace bem::foundation::utils::MathUtils;
 
-Real Panel::length() const {
+Real Element::length() const {
   return distance(start, end);
 }
 
-Point2D Panel::midpoint() const {
+Point2D Element::midpoint() const {
   return Point2D{0.5 * (start.x + end.x), 0.5 * (start.y + end.y)};
 }
 
-Vector2D Panel::tangent() const {
+Vector2D Element::tangent() const {
   return Vector2D{end.x - start.x, end.y - start.y};
 }
 
-Vector2D Panel::normal() const {
+Vector2D Element::normal() const {
   Vector2D t = tangent();
   return Vector2D{-t.y, t.x};
 }
 
 // Parametric point with xi ∈ [-1, 1]
-Point2D Panel::parametricPoint(Real xi) const {
+Point2D Element::parametricPoint(Real xi) const {
   const Real a = 0.5 * (1.0 - xi);
   const Real b = 0.5 * (1.0 + xi);
   return Point2D{(a * start.x) + (b * end.x), (a * start.y) + (b * end.y)};
 }
 
 // Jacobian for numerical integration in the [-1, 1] parametric domain
-Real Panel::jacobian() const {
+Real Element::jacobian() const {
   return 0.5 * length();
 }
 
-bool Panel::contains(const Point2D &pt, Real tol) const {
-  // Panel vector
+bool Element::contains(const Point2D &pt, Real tol) const {
+  // Element vector
   const Real dx = end.x - start.x;
   const Real dy = end.y - start.y;
 
-  // Vector from panel start to point
+  // vector from element start to point
   const Real dxp = pt.x - start.x;
   const Real dyp = pt.y - start.y;
 
@@ -50,7 +50,7 @@ bool Panel::contains(const Point2D &pt, Real tol) const {
     return false;
   }
 
-  // Dot produt to check if point is within panel extremes
+  // Dot produt to check if point is within element extremes
   const Real dot = (dx * dxp) + (dy * dyp);
   const Real len2 = (dx * dx) + (dy * dy);
 

@@ -7,7 +7,7 @@
 namespace bem::domain::integration {
 
 using bem::types::Complex;
-using bem::types::Panel;
+using bem::types::Element;
 using bem::types::Point2D;
 using bem::types::QuadraturePoint;
 
@@ -25,7 +25,7 @@ public:
    * @return The result of the integration.
    */
   virtual Complex
-  integrate(const Panel &panel,
+  integrate(const Element &panel,
             const std::function<Complex(const Point2D &)> &integrand) const = 0;
 };
 

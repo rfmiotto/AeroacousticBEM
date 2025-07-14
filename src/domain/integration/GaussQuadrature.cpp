@@ -12,7 +12,7 @@ namespace bem::domain::integration {
 
 using bem::foundation::exceptions::BEMException;
 using bem::types::Complex;
-using bem::types::Panel;
+using bem::types::Element;
 using bem::types::Point2D;
 
 GaussQuadrature::GaussQuadrature(int order) : order_(order) {
@@ -20,12 +20,12 @@ GaussQuadrature::GaussQuadrature(int order) : order_(order) {
 }
 
 Complex GaussQuadrature::integrate(
-    const Panel &panel,
+    const Element &element,
     const std::function<Complex(const Point2D &)> &integrand) const {
   Complex result(0.0, 0.0);
-  const double length = panel.length();
+  const double length = element.length();
   for (const auto &point : points_) {
-    Point2D y = panel.parametricPoint(point.xi);
+    Point2D y = element.parametricPoint(point.xi);
     result += point.weight * integrand(y) * (length / 2);
   }
   return result;

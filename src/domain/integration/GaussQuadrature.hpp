@@ -11,7 +11,7 @@ public:
   explicit GaussQuadrature(int order);
 
   [[nodiscard]] Complex integrate(
-      const Panel &panel,
+      const Element &element,
       const std::function<Complex(const Point2D &)> &integrand) const override;
 
   [[nodiscard]] int getOrder() const {

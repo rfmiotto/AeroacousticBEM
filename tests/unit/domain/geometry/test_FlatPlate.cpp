@@ -1,5 +1,6 @@
 #include "domain/geometry/FlatPlate.hpp"
 #include "foundation/utils/MathUtils.hpp"
+#include "types/GeometryTypes.hpp"
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <ranges>
@@ -48,11 +49,11 @@ TEST(FlatPlate2DTest, CorrectRegionClassification) {
   for (const auto &seg : segments) {
     Real mx = seg.midpoint().x;
     if (mx < 0.0) {
-      EXPECT_EQ(seg.region, PanelRegion::UPSTREAM);
+      EXPECT_EQ(seg.region, ElementRegion::UPSTREAM);
     } else if (mx <= 1.0) {
-      EXPECT_EQ(seg.region, PanelRegion::AIRFOIL);
+      EXPECT_EQ(seg.region, ElementRegion::AIRFOIL);
     } else {
-      EXPECT_EQ(seg.region, PanelRegion::DOWNSTREAM);
+      EXPECT_EQ(seg.region, ElementRegion::DOWNSTREAM);
     }
   }
 }
@@ -69,7 +70,7 @@ TEST(FlatPlate2DTest, AirfoilSpansFromZeroToOne) {
   namespace views = std::views;
 
   auto is_airfoil = [](const auto &seg) {
-    return seg.region == PanelRegion::AIRFOIL;
+    return seg.region == ElementRegion::AIRFOIL;
   };
 
   auto extract_x_coords = [](const auto &seg) {

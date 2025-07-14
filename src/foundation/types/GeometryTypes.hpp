@@ -6,22 +6,31 @@
 namespace bem::types {
 
 /**
- * @brief Represents the physical region associated with a boundary segment.
+ * @brief Represents the physical region associated with a boundary element.
  */
-enum class PanelRegion : std::uint8_t {
+enum class ElementRegion : std::uint8_t {
   UPSTREAM,
   AIRFOIL,
   DOWNSTREAM,
 };
 
+// Boundary element types
+enum class ElementType : std::uint8_t {
+  CONSTANT,  // 1-node constant element
+  LINEAR,    // 2-node linear element
+  QUADRATIC, // 3-node quadratic element
+  CUBIC      // 4-node cubic element
+};
+
 // Line segment (Panel) for boundary elements
-struct Panel {
+struct Element {
   Point2D start;
   Point2D end;
-  PanelRegion region = PanelRegion::UPSTREAM; // default initialization
+  ElementRegion region = ElementRegion::UPSTREAM; // default initialization
+  ElementType type = ElementType::CONSTANT;       // default initialization
 
-  Panel() = default;
-  Panel(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {
+  Element() = default;
+  Element(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {
   }
 
   [[nodiscard]] Real length() const;

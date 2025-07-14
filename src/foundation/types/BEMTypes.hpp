@@ -13,14 +13,6 @@ namespace Constants = bem::foundation::utils::Constants;
 using ElementId = std::size_t;
 using NodeId = std::size_t;
 
-// Boundary element types
-enum class ElementType : std::uint8_t {
-  CONSTANT,  // 1-node constant element
-  LINEAR,    // 2-node linear element
-  QUADRATIC, // 3-node quadratic element
-  CUBIC      // 4-node cubic element
-};
-
 // Integration rule types
 enum class IntegrationType : std::uint8_t {
   GAUSS,    // Gauss-Legendre quadrature

@@ -7,7 +7,7 @@
 namespace bem::domain::integration {
 
 using bem::types::Complex;
-using bem::types::Panel;
+using bem::types::Element;
 using bem::types::Point2D;
 using bem::types::Vector2D;
 
@@ -20,9 +20,9 @@ public:
   virtual ~SingularityTreatment() = default;
 
   [[nodiscard]] virtual Complex
-  treatGreen(const Panel &panel, const Point2D &x, double k) const = 0;
+  treatGreen(const Element &element, const Point2D &x, double k) const = 0;
 
-  [[nodiscard]] virtual Complex treatNormalDerivative(const Panel &panel,
+  [[nodiscard]] virtual Complex treatNormalDerivative(const Element &element,
                                                       const Point2D &x,
                                                       const Vector2D &normal,
                                                       double k) const = 0;
@@ -35,16 +35,16 @@ using bem::foundation::utils::Constants::PI;
 
 class ConstantSingularityTreatment : public SingularityTreatment {
 public:
-  [[nodiscard]] Complex treatGreen(const Panel &panel,
+  [[nodiscard]] Complex treatGreen(const Element &element,
                                    const Point2D & /*x*/,
                                    double k) const override {
-    const double length = panel.length();
+    const double length = element.length();
     const double term =
         (1.0 - EULER_MASCHERONI - std::log(k * length * 0.25)) * INV_2PI;
     return Complex(term, 0.25) * length;
   }
 
-  [[nodiscard]] Complex treatNormalDerivative(const Panel & /*panel*/,
+  [[nodiscard]] Complex treatNormalDerivative(const Element & /*element*/,
                                               const Point2D & /*x*/,
                                               const Vector2D & /*normal*/,
                                               double /*k*/) const override {

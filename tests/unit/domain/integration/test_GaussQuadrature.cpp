@@ -8,7 +8,7 @@ using namespace bem::types;
 using namespace bem::foundation::utils::Constants;
 
 namespace {
-Panel createUnitPanel() {
+Element createUnitPanel() {
   Point2D p1(0.0, 0.0);
   Point2D p2(1.0, 0.0);
   return {p1, p2};
@@ -28,13 +28,13 @@ TEST(GaussQuadratureTest, CorrectNumberOfPointsPerOrder) {
 
 // Test integral of f(x) = 1 over [0,1] → expect: 1.0
 TEST(GaussQuadratureTest, ConstantFunction) {
-  Panel panel = createUnitPanel();
+  Element element = createUnitPanel();
 
   auto f = [](const Point2D &) -> Complex { return {1.0, 0.0}; };
 
   for (int order : {1, 2, 3, 4, 5, 6, 8}) {
     GaussQuadrature quad(order);
-    Complex result = quad.integrate(panel, f);
+    Complex result = quad.integrate(element, f);
     EXPECT_NEAR(result.real(), 1.0, INTEGRATION_TOLERANCE)
         << "Failed on real part for order " << order;
     EXPECT_NEAR(result.imag(), 0.0, INTEGRATION_TOLERANCE)
@@ -44,13 +44,13 @@ TEST(GaussQuadratureTest, ConstantFunction) {
 
 // Test integral of f(x) = x over [0,1] → expect: 0.5
 TEST(GaussQuadratureTest, LinearFunction) {
-  Panel panel = createUnitPanel();
+  Element element = createUnitPanel();
 
   auto f = [](const Point2D &pt) -> Complex { return {pt.x, 0.0}; };
 
   for (int order : {1, 2, 3, 4, 5, 6, 8}) {
     GaussQuadrature quad(order);
-    Complex result = quad.integrate(panel, f);
+    Complex result = quad.integrate(element, f);
     EXPECT_NEAR(result.real(), 0.5, INTEGRATION_TOLERANCE)
         << "Failed on real part for order " << order;
     EXPECT_NEAR(result.imag(), 0.0, INTEGRATION_TOLERANCE)
@@ -60,13 +60,13 @@ TEST(GaussQuadratureTest, LinearFunction) {
 
 // Test integral of f(x) = i*x over [0,1] → expect: 0.5i
 TEST(GaussQuadratureTest, ImaginaryFunction) {
-  Panel panel = createUnitPanel();
+  Element element = createUnitPanel();
 
   auto f = [](const Point2D &pt) -> Complex { return {0.0, pt.x}; };
 
   for (int order : {1, 2, 3, 4, 5, 6, 8}) {
     GaussQuadrature quad(order);
-    Complex result = quad.integrate(panel, f);
+    Complex result = quad.integrate(element, f);
     EXPECT_NEAR(result.real(), 0.0, INTEGRATION_TOLERANCE)
         << "Failed on real part for order " << order;
     EXPECT_NEAR(result.imag(), 0.5, INTEGRATION_TOLERANCE)

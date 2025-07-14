@@ -15,7 +15,7 @@ public:
   explicit TellesQuadrature(int order);
 
   [[nodiscard]] Complex integrate(
-      const Panel &panel,
+      const Element &element,
       const std::function<Complex(const Point2D &)> &integrand) const override;
 
 private:
@@ -25,7 +25,7 @@ private:
   void setupStandardPoints();
   static Real tellesTransform(Real xi, Real xi_star);
   static Real tellesTransformDerivative(Real xi, Real xi_star);
-  static Real computeXiStar(const Panel &panel, const Point2D &x);
+  static Real computeXiStar(const Element &element, const Point2D &x);
 };
 
 } // namespace bem::domain::integration

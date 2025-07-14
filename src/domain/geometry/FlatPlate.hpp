@@ -5,8 +5,8 @@
 
 namespace bem::domain::geometry {
 
-using bem::types::Panel;
-using bem::types::PanelRegion;
+using bem::types::Element;
+using bem::types::ElementRegion;
 using bem::types::Point2D;
 using bem::types::Real;
 
@@ -24,8 +24,8 @@ using bem::types::Real;
  */
 class FlatPlate2D {
 public:
-  FlatPlate2D(std::size_t nAirfoilPanels,
-              std::size_t nVerticalPanels,
+  FlatPlate2D(std::size_t nAirfoilElements,
+              std::size_t nVerticalElements,
               Real thickness,
               Real domainLength);
 
@@ -33,21 +33,21 @@ public:
     return points_;
   }
 
-  [[nodiscard]] const std::vector<Panel> &getPanels() const {
+  [[nodiscard]] const std::vector<Element> &getPanels() const {
     return panels_;
   }
 
-  [[nodiscard]] const std::vector<PanelRegion> &getTaggedPanels() const {
+  [[nodiscard]] const std::vector<ElementRegion> &getTaggedPanels() const {
     return taggedPanels_;
   }
 
 private:
   std::vector<Point2D> points_;
-  std::vector<Panel> panels_;
-  std::vector<PanelRegion> taggedPanels_;
+  std::vector<Element> panels_;
+  std::vector<ElementRegion> taggedPanels_;
 
-  void generatePlate(std::size_t nAirfoilPanels,
-                     std::size_t nVerticalPanels,
+  void generatePlate(std::size_t nAirfoilElements,
+                     std::size_t nVerticalElements,
                      Real thickness,
                      Real domainLength);
 };

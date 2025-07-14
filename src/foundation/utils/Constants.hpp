@@ -27,7 +27,7 @@ static constexpr Real MACHINE_EPSILON = std::numeric_limits<Real>::epsilon();
 static constexpr Real SQRT_MACHINE_EPSILON = 1.4901161193847656e-08;
 static constexpr Real INTEGRATION_TOLERANCE = 1e-12;
 static constexpr Real SOLVER_TOLERANCE = 1e-12;
-static constexpr Real GEOMETRY_TOLERANCE = 1e-14;
+static constexpr Real GEOMETRY_TOLERANCE = 1e-12;
 
 // BEM-specific constants
 static constexpr Real SINGULARITY_DISTANCE_THRESHOLD = 1e-6;

@@ -10,8 +10,10 @@ class GaussQuadrature : public IQuadratureRule {
 public:
   explicit GaussQuadrature(int order);
 
-  [[nodiscard]] Complex integrate(
+  [[nodiscard]]
+  Complex integrate(
       const Element &element,
+      const Point2D & /* x */,
       const std::function<Complex(const Point2D &)> &integrand) const override;
 
   [[nodiscard]] int getOrder() const {

@@ -44,7 +44,7 @@ public:
     return Complex(term, 0.25) * length;
   }
 
-  [[nodiscard]] Complex treatNormalDerivative(const Element & /*element*/,
+  [[nodiscard]] Complex treatNormalDerivative(const Element & /*panel*/,
                                               const Point2D & /*x*/,
                                               const Vector2D & /*normal*/,
                                               double /*k*/) const override {

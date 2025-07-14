@@ -41,14 +41,16 @@ inline GreenIntegrator makeGreenIntegrator(
 
     if (is_singular && params.use_singularity_treatment) {
       TellesQuadrature telles(order);
-      return telles.integrate(
-          element, [&](const Point2D &y) { return greensFunction2D(x, y, k); });
+      return telles.integrate(element, x, [&](const Point2D &y) {
+        return greensFunction2D(x, y, k);
+      });
     }
 
     // Regular integration
     GaussQuadrature gauss(order);
-    return gauss.integrate(
-        element, [&](const Point2D &y) { return greensFunction2D(x, y, k); });
+    return gauss.integrate(element, x, [&](const Point2D &y) {
+      return greensFunction2D(x, y, k);
+    });
   };
 }
 
@@ -68,13 +70,13 @@ inline NormalDerivativeIntegrator makeNormalDerivativeIntegrator(
 
     if (is_singular && params.use_singularity_treatment) {
       TellesQuadrature telles(order);
-      return telles.integrate(element, [&](const Point2D &y) {
+      return telles.integrate(element, x, [&](const Point2D &y) {
         return greensFunctionNormalDerivative2D(x, y, normal, k);
       });
     }
 
     GaussQuadrature gauss(order);
-    return gauss.integrate(element, [&](const Point2D &y) {
+    return gauss.integrate(element, x, [&](const Point2D &y) {
       return greensFunctionNormalDerivative2D(x, y, normal, k);
     });
   };

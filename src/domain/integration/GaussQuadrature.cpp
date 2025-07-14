@@ -1,5 +1,3 @@
-#pragma once
-
 #include "integration/GaussQuadrature.hpp"
 #include "foundation/exceptions/BEMException.hpp"
 #include "foundation/types/BEMTypes.hpp"
@@ -21,6 +19,7 @@ GaussQuadrature::GaussQuadrature(int order) : order_(order) {
 
 Complex GaussQuadrature::integrate(
     const Element &element,
+    const Point2D & /* x */,
     const std::function<Complex(const Point2D &)> &integrand) const {
   Complex result(0.0, 0.0);
   const double length = element.length();

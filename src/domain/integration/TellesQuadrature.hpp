@@ -14,9 +14,15 @@ class TellesQuadrature : public IQuadratureRule {
 public:
   explicit TellesQuadrature(int order);
 
-  [[nodiscard]] Complex integrate(
+  [[nodiscard]]
+  Complex integrate(
       const Element &element,
+      const Point2D &x,
       const std::function<Complex(const Point2D &)> &integrand) const override;
+
+  [[nodiscard]] const std::vector<QuadraturePoint> &getPoints() const {
+    return standard_points_;
+  }
 
 private:
   int order_;

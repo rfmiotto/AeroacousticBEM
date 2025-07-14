@@ -25,7 +25,8 @@ public:
    * @return The result of the integration.
    */
   virtual Complex
-  integrate(const Element &panel,
+  integrate(const Element &element,
+            const Point2D &x,
             const std::function<Complex(const Point2D &)> &integrand) const = 0;
 };
 

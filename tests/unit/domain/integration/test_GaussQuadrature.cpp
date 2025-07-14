@@ -1,5 +1,5 @@
 #include "domain/integration/GaussQuadrature.hpp"
-#include "foundation/types/GeometryTypes.hpp"
+#include "foundation/exceptions/BEMException.hpp"
 #include "foundation/utils/Constants.hpp"
 #include <gtest/gtest.h>
 
@@ -34,7 +34,7 @@ TEST(GaussQuadratureTest, ConstantFunction) {
 
   for (int order : {1, 2, 3, 4, 5, 6, 8}) {
     GaussQuadrature quad(order);
-    Complex result = quad.integrate(element, f);
+    Complex result = quad.integrate(element, element.midpoint(), f);
     EXPECT_NEAR(result.real(), 1.0, INTEGRATION_TOLERANCE)
         << "Failed on real part for order " << order;
     EXPECT_NEAR(result.imag(), 0.0, INTEGRATION_TOLERANCE)
@@ -50,7 +50,7 @@ TEST(GaussQuadratureTest, LinearFunction) {
 
   for (int order : {1, 2, 3, 4, 5, 6, 8}) {
     GaussQuadrature quad(order);
-    Complex result = quad.integrate(element, f);
+    Complex result = quad.integrate(element, element.midpoint(), f);
     EXPECT_NEAR(result.real(), 0.5, INTEGRATION_TOLERANCE)
         << "Failed on real part for order " << order;
     EXPECT_NEAR(result.imag(), 0.0, INTEGRATION_TOLERANCE)
@@ -66,7 +66,7 @@ TEST(GaussQuadratureTest, ImaginaryFunction) {
 
   for (int order : {1, 2, 3, 4, 5, 6, 8}) {
     GaussQuadrature quad(order);
-    Complex result = quad.integrate(element, f);
+    Complex result = quad.integrate(element, element.midpoint(), f);
     EXPECT_NEAR(result.real(), 0.0, INTEGRATION_TOLERANCE)
         << "Failed on real part for order " << order;
     EXPECT_NEAR(result.imag(), 0.5, INTEGRATION_TOLERANCE)

@@ -29,11 +29,11 @@ void TellesQuadrature::setupStandardPoints() {
 }
 
 Real TellesQuadrature::tellesTransform(Real xi, Real xi_star) {
-  return (xi * xi * (3.0 - 2.0 * std::abs(xi_star)) * xi_star / 2.0) + xi;
+  return xi + ((xi * xi - 1.0) * xi_star * (3.0 - 2.0 * xi * xi_star) / 2.0);
 }
 
 Real TellesQuadrature::tellesTransformDerivative(Real xi, Real xi_star) {
-  return 1.0 + (3.0 * xi * (1.0 - std::abs(xi_star)));
+  return 1.0 + (3.0 * xi * (1.0 - xi * xi_star) * xi_star);
 }
 
 Real TellesQuadrature::computeXiStar(const Element &element, const Point2D &x) {
@@ -47,9 +47,11 @@ Real TellesQuadrature::computeXiStar(const Element &element, const Point2D &x) {
 
 Complex TellesQuadrature::integrate(
     const Element &element,
+    const Point2D &x,
     const std::function<Complex(const Point2D &)> &integrand) const {
+
   Complex result(0.0, 0.0);
-  Real xi_star = computeXiStar(element, element.midpoint());
+  Real xi_star = computeXiStar(element, x);
   const double jacobian = element.jacobian();
 
   for (const auto &qp : standard_points_) {

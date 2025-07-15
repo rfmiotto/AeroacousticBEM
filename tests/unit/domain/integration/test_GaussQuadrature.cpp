@@ -6,6 +6,7 @@
 using namespace bem::domain::integration;
 using namespace bem::types;
 using namespace bem::foundation::utils::Constants;
+using namespace bem::foundation::exceptions;
 
 namespace {
 Element createUnitPanel() {
@@ -75,7 +76,7 @@ TEST(GaussQuadratureTest, ImaginaryFunction) {
 }
 
 TEST(GaussQuadratureTest, ThrowsForUnsupportedOrder) {
-  EXPECT_THROW(GaussQuadrature(7), bem::foundation::exceptions::BEMException);
-  EXPECT_THROW(GaussQuadrature(0), bem::foundation::exceptions::BEMException);
-  EXPECT_THROW(GaussQuadrature(9), bem::foundation::exceptions::BEMException);
+  EXPECT_THROW(GaussQuadrature(7), BEMIntegrationException);
+  EXPECT_THROW(GaussQuadrature(0), BEMIntegrationException);
+  EXPECT_THROW(GaussQuadrature(9), BEMIntegrationException);
 }

@@ -22,7 +22,7 @@ enum class ElementType : std::uint8_t {
   CUBIC      // 4-node cubic element
 };
 
-// Line segment (Panel) for boundary elements
+// Line segment for boundary elements
 struct Element {
   Point2D start;
   Point2D end;

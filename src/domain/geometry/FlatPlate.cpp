@@ -40,8 +40,8 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoilElements,
   Real dy = (yEnd - yBeg) / static_cast<Real>(nVerticalElements);
 
   points_.clear();
-  panels_.clear();
-  taggedPanels_.clear();
+  elements_.clear();
+  taggedElements_.clear();
 
   // 1. Top side: left → right
   for (std::size_t i = 0; i <= nx; ++i) {
@@ -84,7 +84,7 @@ void FlatPlate2D::generatePlate(std::size_t nAirfoilElements,
       seg.region = ElementRegion::DOWNSTREAM;
     }
 
-    panels_.push_back(seg);
+    elements_.push_back(seg);
   }
 }
 } // namespace bem::domain::geometry

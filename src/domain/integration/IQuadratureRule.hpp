@@ -18,8 +18,8 @@ public:
   virtual ~IQuadratureRule() = default;
 
   /**
-   * @brief Integrates a function over a panel using the quadrature rule.
-   * @param panel The boundary element.
+   * @brief Integrates a function over an element using the quadrature rule.
+   * @param element The boundary element.
    * @param integrand The function to integrate.
    * @return The result of the integration.
    */

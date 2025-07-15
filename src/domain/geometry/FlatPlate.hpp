@@ -33,18 +33,18 @@ public:
     return points_;
   }
 
-  [[nodiscard]] const std::vector<Element> &getPanels() const {
-    return panels_;
+  [[nodiscard]] const std::vector<Element> &getElements() const {
+    return elements_;
   }
 
-  [[nodiscard]] const std::vector<ElementRegion> &getTaggedPanels() const {
-    return taggedPanels_;
+  [[nodiscard]] const std::vector<ElementRegion> &getTaggedElements() const {
+    return taggedElements_;
   }
 
 private:
   std::vector<Point2D> points_;
-  std::vector<Element> panels_;
-  std::vector<ElementRegion> taggedPanels_;
+  std::vector<Element> elements_;
+  std::vector<ElementRegion> taggedElements_;
 
   void generatePlate(std::size_t nAirfoilElements,
                      std::size_t nVerticalElements,

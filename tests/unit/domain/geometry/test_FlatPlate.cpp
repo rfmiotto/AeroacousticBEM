@@ -44,7 +44,7 @@ TEST(FlatPlate2DTest, CorrectRegionClassification) {
   Real domainLength = 7.0;
 
   FlatPlate2D plate(nAirfoil, nVertical, thickness, domainLength);
-  const auto &segments = plate.getPanels();
+  const auto &segments = plate.getElements();
 
   for (const auto &seg : segments) {
     Real mx = seg.midpoint().x;
@@ -65,7 +65,7 @@ TEST(FlatPlate2DTest, AirfoilSpansFromZeroToOne) {
   Real domainLength = 4.0;
 
   FlatPlate2D plate(nAirfoil, nVertical, thickness, domainLength);
-  const auto &segments = plate.getPanels();
+  const auto &segments = plate.getElements();
 
   namespace views = std::views;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "foundation/types/BEMTypes.hpp"
+#include "GaussLegendreTable.hpp"
 #include "foundation/types/GeometryTypes.hpp"
 #include <functional>
 
@@ -9,7 +9,6 @@ namespace bem::domain::integration {
 using bem::types::Complex;
 using bem::types::Element;
 using bem::types::Point2D;
-using bem::types::QuadraturePoint;
 
 /**
  * @brief Interface for quadrature rules.

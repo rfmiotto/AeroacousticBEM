@@ -14,15 +14,8 @@ enum class BoundaryConditionType : std::uint8_t {
 
 // Boundary value
 struct BoundaryValue {
-  Complex potential;         // φ (acoustic potential)
-  Complex normal_derivative; // ∂φ/∂n (normal velocity)
-  bool potential_known{false};
-  bool derivative_known{false};
-
-  BoundaryValue() = default;
-  explicit BoundaryValue(Complex pot, bool pot_known = true)
-      : potential(pot), potential_known(pot_known) {
-  }
+  Complex potential{0.0};         // φ
+  Complex normal_derivative{0.0}; // ∂φ/∂n
 };
 
 // Function types for boundary conditions

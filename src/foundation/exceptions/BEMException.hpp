@@ -25,4 +25,9 @@ public:
   explicit BEMConvergenceException(const std::string &msg);
 };
 
+class BoundaryConditionException : public BEMException {
+public:
+  explicit BoundaryConditionException(const std::string &msg);
+};
+
 } // namespace bem::foundation::exceptions

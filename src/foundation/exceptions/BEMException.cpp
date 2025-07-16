@@ -18,4 +18,8 @@ BEMConvergenceException::BEMConvergenceException(const std::string &msg)
     : BEMException("Convergence failure: " + msg) {
 }
 
+BoundaryConditionException::BoundaryConditionException(const std::string &msg)
+    : BEMException("Boundary condition error: " + msg) {
+}
+
 } // namespace bem::foundation::exceptions

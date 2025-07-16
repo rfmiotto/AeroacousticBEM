@@ -26,8 +26,8 @@ enum class ElementType : std::uint8_t {
 struct Element {
   Point2D start;
   Point2D end;
-  ElementRegion region = ElementRegion::UPSTREAM; // default initialization
-  ElementType type = ElementType::CONSTANT;       // default initialization
+  ElementRegion region = ElementRegion::UPSTREAM;
+  ElementType type = ElementType::CONSTANT;
 
   Element() = default;
   Element(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {

@@ -59,6 +59,6 @@ if [[ -d "tests" ]] || [[ -f "CTestTestfile.cmake" ]]; then
   echo "🧪 Running tests..."
   pushd "$BUILD_DIR" >/dev/null
   # ctest --build-config "$BUILD_TYPE" --output-on-failure
-  ctest --build-config "$BUILD_TYPE" --output-on-failure -V --timeout 10
+  ctest --build-config "$BUILD_TYPE" --output-on-failure --timeout 10 --summary
   popd >/dev/null
 fi

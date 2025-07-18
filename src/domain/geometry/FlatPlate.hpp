@@ -1,6 +1,7 @@
 #pragma once
 
 #include "foundation/types/GeometryTypes.hpp"
+#include <span>
 #include <vector>
 
 namespace bem::domain::geometry {
@@ -37,14 +38,34 @@ public:
     return elements_;
   }
 
-  [[nodiscard]] const std::vector<ElementRegion> &getTaggedElements() const {
-    return taggedElements_;
-  }
+  void setPoints(std::vector<Point2D> &&newPoints);
+
+  void buildElements();
+
+  [[nodiscard]] std::span<const Point2D> getTopUpstreamPoints() const;
+  [[nodiscard]] std::span<const Point2D> getTopAirfoilPoints() const;
+  [[nodiscard]] std::span<const Point2D> getTopDownstreamPoints() const;
+
+  [[nodiscard]] std::span<const Point2D> getSideUpstreamPoints() const;
+  [[nodiscard]] std::span<const Point2D> getSideDownstreamPoints() const;
+
+  [[nodiscard]] std::span<const Point2D> getBottomUpstreamPoints() const;
+  [[nodiscard]] std::span<const Point2D> getBottomAirfoilPoints() const;
+  [[nodiscard]] std::span<const Point2D> getBottomDownstreamPoints() const;
 
 private:
   std::vector<Point2D> points_;
   std::vector<Element> elements_;
-  std::vector<ElementRegion> taggedElements_;
+
+  // Reference point indices
+  std::size_t topLeft_{0};
+  std::size_t topAirfoilLE_{0};
+  std::size_t topAirfoilTE_{0};
+  std::size_t topRight_{0};
+  std::size_t bottomRight_{0};
+  std::size_t bottomAirfoilTE_{0};
+  std::size_t bottomAirfoilLE_{0};
+  std::size_t bottomLeft_{0};
 
   void generatePlate(std::size_t nAirfoilElements,
                      std::size_t nVerticalElements,

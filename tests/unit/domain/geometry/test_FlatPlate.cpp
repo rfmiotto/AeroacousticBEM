@@ -86,3 +86,53 @@ TEST(FlatPlate2DTest, AirfoilSpansFromZeroToOne) {
   EXPECT_TRUE(isEqual(airfoilXMin, 0.0)) << "Airfoil must start at x = 0";
   EXPECT_TRUE(isEqual(airfoilXMax, 1.0)) << "Airfoil must end at x = 1";
 }
+
+TEST(FlatPlate2DTest, PointRegionSpansAreCorrectlyPartitioned) {
+  std::size_t nAirfoil = 8;
+  std::size_t nVertical = 2;
+  Real thickness = 1.0;
+  Real domainLength = 3.0;
+
+  FlatPlate2D plate(nAirfoil, nVertical, thickness, domainLength);
+
+  auto checkXRangeInclusive = [](auto points, Real xMin, Real xMax) {
+    for (const auto &pt : points) {
+      EXPECT_GE(pt.x, xMin);
+      EXPECT_LE(pt.x, xMax);
+    }
+  };
+
+  auto checkXLessThanOrEqual = [](auto points, Real xVal) {
+    for (const auto &pt : points) {
+      EXPECT_LE(pt.x, xVal);
+    }
+  };
+
+  auto checkXGreaterThanOrEqual = [](auto points, Real xVal) {
+    for (const auto &pt : points) {
+      EXPECT_GE(pt.x, xVal);
+    }
+  };
+
+  // Top
+  checkXLessThanOrEqual(plate.getTopUpstreamPoints(), 0.0);
+  checkXRangeInclusive(plate.getTopAirfoilPoints(), 0.0, 1.0);
+  checkXGreaterThanOrEqual(plate.getTopDownstreamPoints(), 1.0);
+
+  // Bottom
+  checkXGreaterThanOrEqual(plate.getBottomDownstreamPoints(), 1.0);
+  checkXRangeInclusive(plate.getBottomAirfoilPoints(), 0.0, 1.0);
+  checkXLessThanOrEqual(plate.getBottomUpstreamPoints(), 0.0);
+
+  // Side (left = upstream, right = downstream)
+  Real leftX = -1.0 * (domainLength - 1.0) / 2.0;
+  Real rightX = 1.0 + ((domainLength - 1.0) / 2.0);
+
+  for (const auto &pt : plate.getSideUpstreamPoints()) {
+    EXPECT_NEAR(pt.x, leftX, 1e-12);
+  }
+
+  for (const auto &pt : plate.getSideDownstreamPoints()) {
+    EXPECT_NEAR(pt.x, rightX, 1e-12);
+  }
+}

@@ -30,6 +30,10 @@ public:
               Real thickness,
               Real domainLength);
 
+  [[nodiscard]] std::vector<Point2D> &accessPoints() {
+    return points_;
+  }
+
   [[nodiscard]] const std::vector<Point2D> &getPoints() const {
     return points_;
   }

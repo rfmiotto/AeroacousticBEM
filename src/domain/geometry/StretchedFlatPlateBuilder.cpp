@@ -10,29 +10,30 @@ FlatPlate2D makeStretchedPlate(std::size_t nAirfoilElements,
   // 1. Create flat plate with uniform point distribution
   FlatPlate2D plate(nAirfoilElements, nVerticalElements, thickness,
                     domainLength);
-  std::vector<Point2D> stretchedPoints = plate.getPoints();
+  std::vector<Point2D> &stretchedPoints = plate.accessPoints();
 
-  // Helper to apply stretching in-place to a span of points
-  auto applyStretching = [](std::span<const Point2D> pointsToStretch,
-                            std::vector<Point2D> &allPoints, Real xBeg,
-                            Real xEnd, bool reverse,
-                            const StretchingParams &params) {
-    const int n = static_cast<int>(pointsToStretch.size());
-    const std::ptrdiff_t offset = pointsToStretch.data() - allPoints.data();
+  // Split span into equal halves (symmetrical), discard middle if odd
+  auto splitSpanInHalfSymmetric = [](std::span<const Point2D> span) {
+    const std::size_t half = span.size() / 2;
+    return std::pair{span.subspan(0, half),
+                     span.subspan(span.size() - half, half)};
+  };
 
-    StretchingFunction stretch(xBeg, xEnd, n, params);
+  // Helper to apply stretching to a span of points in-place
+  auto stretchSpan = [&](std::span<const Point2D> span, Real xBeg, Real xEnd,
+                         bool concentrateAtEnd) {
+    const int n = static_cast<int>(span.size());
+    std::ptrdiff_t offset = span.data() - stretchedPoints.data();
+
+    StretchingParams localParams = params;
+    localParams.concentrateAtEnd = concentrateAtEnd;
+
+    StretchingFunction stretch(xBeg, xEnd, n, localParams);
     const auto nodes = stretch.generateNodes();
 
     for (int i = 0; i < n; ++i) {
-      const std::size_t idx = offset + i;
-      allPoints[idx].x = nodes[reverse ? (n - 1 - i) : i];
+      stretchedPoints[offset + i].x = nodes[i];
     }
-  };
-
-  // Helper to split a span into two halves
-  auto splitSpanInHalf = [](std::span<const Point2D> span) {
-    const std::size_t half = span.size() / 2;
-    return std::pair{span.first(half), span.last(span.size() - half)};
   };
 
   // 2. Apply stretching to each region
@@ -40,43 +41,37 @@ FlatPlate2D makeStretchedPlate(std::size_t nAirfoilElements,
   // -- UPSTREAM
   {
     auto topUpstream = plate.getTopUpstreamPoints();
-    auto idx = topUpstream.data() - stretchedPoints.data();
-    applyStretching(topUpstream, stretchedPoints, stretchedPoints[idx].x, 0.0,
-                    false, params);
+    auto botUpstream = plate.getBottomUpstreamPoints();
 
-    auto bottomUpstream = plate.getBottomUpstreamPoints();
-    idx = bottomUpstream.data() - stretchedPoints.data();
-    applyStretching(bottomUpstream, stretchedPoints, stretchedPoints[idx].x,
-                    0.0, true, params);
+    stretchSpan(topUpstream, topUpstream.front().x, topUpstream.back().x, true);
+    stretchSpan(botUpstream, botUpstream.front().x, botUpstream.back().x,
+                false);
   }
 
   // -- AIRFOIL
   {
-    auto [topLeft, topRight] = splitSpanInHalf(plate.getTopAirfoilPoints());
+    auto [topLeft, topRight] =
+        splitSpanInHalfSymmetric(plate.getTopAirfoilPoints());
     auto [botRight, botLeft] =
-        splitSpanInHalf(plate.getBottomAirfoilPoints()); // mirrored
+        splitSpanInHalfSymmetric(plate.getBottomAirfoilPoints());
 
-    applyStretching(topLeft, stretchedPoints, 0.0, 0.5, false, params);
-    applyStretching(topRight, stretchedPoints, 0.5, 1.0, false, params);
-    applyStretching(botLeft, stretchedPoints, 0.0, 0.5, true, params);
-    applyStretching(botRight, stretchedPoints, 0.5, 1.0, true, params);
+    stretchSpan(topLeft, topLeft.front().x, topLeft.back().x, false);
+    stretchSpan(topRight, topRight.front().x, topRight.back().x, true);
+    stretchSpan(botRight, botRight.front().x, botRight.back().x, false);
+    stretchSpan(botLeft, botLeft.front().x, botLeft.back().x, true);
   }
 
   // -- DOWNSTREAM
   {
     auto topDownstream = plate.getTopDownstreamPoints();
-    auto idx = topDownstream.data() - stretchedPoints.data();
-    applyStretching(topDownstream, stretchedPoints, 1.0, stretchedPoints[idx].x,
-                    false, params);
+    auto botDownstream = plate.getBottomDownstreamPoints();
 
-    auto bottomDownstream = plate.getBottomDownstreamPoints();
-    idx = bottomDownstream.data() - stretchedPoints.data();
-    applyStretching(bottomDownstream, stretchedPoints, 1.0,
-                    stretchedPoints[idx].x, true, params);
+    stretchSpan(topDownstream, topDownstream.front().x, topDownstream.back().x,
+                false);
+    stretchSpan(botDownstream, botDownstream.front().x, botDownstream.back().x,
+                true);
   }
 
-  // 3. Update plate with modified points
-  plate.setPoints(std::move(stretchedPoints));
   return plate;
 }
 

@@ -1,9 +1,25 @@
 #include "domain/geometry/Stretching.hpp"
 #include "utils/Constants.hpp"
+#include <fstream>
 #include <gtest/gtest.h>
 
 using namespace bem::domain::geometry;
 using namespace bem::foundation::utils::Constants;
+
+namespace {
+void writePointsToCSV(const std::vector<double> &points,
+                      const std::string &filename) {
+  std::ofstream file(filename);
+  if (!file) {
+    return;
+  }
+  file << "x,y\n";
+  for (const auto &pt : points) {
+    file << pt << "," << 0.0 << "\n";
+  }
+  file.close();
+}
+} // namespace
 
 TEST(StretchingFunctionTest, GeneratesCorrectNumberOfNodes) {
   StretchingParams params{.paramP = 0.5, .paramQ = 3.0};
@@ -40,6 +56,8 @@ TEST(StretchingFunctionTest,
 
   StretchingFunction stretch(xBeg, xEnd, numPoints, params);
   auto nodes = stretch.generateNodes();
+
+  writePointsToCSV(nodes, "stretching_concentrate_at_0.csv");
 
   ASSERT_NEAR(nodes.front(), xBeg, GEOMETRY_TOLERANCE);
   ASSERT_NEAR(nodes.back(), xEnd, GEOMETRY_TOLERANCE);
@@ -93,7 +111,7 @@ TEST(StretchingFunctionTest, ConcentratesAtBeginningWhenSpecified) {
 TEST(StretchingFunctionTest, ConcentratesAtEndEvenWithInvertedInterval) {
   StretchingParams params{
       .paramP = 1.9, .paramQ = 2.0, .concentrateAtEnd = true};
-  StretchingFunction stretch(1.0, 0.0, 20, params); // Invertido
+  StretchingFunction stretch(1.0, 0.0, 20, params); // Inverted
   auto nodes = stretch.generateNodes();
 
   // Expect nodes to be closer to each other at the end (0.0)
@@ -107,7 +125,7 @@ TEST(StretchingFunctionTest, ConcentratesAtEndEvenWithInvertedInterval) {
 TEST(StretchingFunctionTest, ConcentratesAtBeginningWithInvertedInterval) {
   StretchingParams params{
       .paramP = 1.9, .paramQ = 2.0, .concentrateAtEnd = false};
-  StretchingFunction stretch(1.0, 0.0, 20, params); // Invertido
+  StretchingFunction stretch(1.0, 0.0, 20, params); // Inverted
   auto nodes = stretch.generateNodes();
 
   // Expect nodes to be closer to each other at the beginning (1.0)

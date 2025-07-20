@@ -1,8 +1,15 @@
 #pragma once
 
+#include "utils/Constants.hpp"
+#include "utils/MathUtils.hpp"
 #include <cmath>
 #include <stdexcept>
 #include <vector>
+
+namespace bem::domain::geometry {
+
+using bem::foundation::utils::Constants::GEOMETRY_TOLERANCE;
+using bem::foundation::utils::MathUtils::isEqual;
 
 /**
  * @brief Parameters used in the stretching function.
@@ -12,10 +19,13 @@
  *
  * - `paramP`: Controls the linear-to-nonlinear blend.
  * - `paramQ`: Controls the sharpness of the nonlinear clustering.
+ * - `concentrateAtEnd`: Controls whether the points must be concentrated
+ *                       at the end or beginning of the domain.
  */
 struct StretchingParams {
   double paramP = 1.9;
   double paramQ = 2.0;
+  bool concentrateAtEnd = true;
 };
 
 /**
@@ -42,7 +52,7 @@ public:
    * @brief Constructs a StretchingFunction over a given domain with optional
    * parameters.
    *
-   * @param xBeg Starting coordinate of the domain.
+   * @param xBeg Starting coordinate of the domain.meaning
    * @param xEnd Ending coordinate of the domain.
    * @param numPoints Number of nodes to generate (must be >= 2).
    * @param params Stretching parameters (optional; default values provided).
@@ -54,12 +64,14 @@ public:
                      int numPoints,
                      const StretchingParams &params = StretchingParams{})
       : paramP_(params.paramP), paramQ_(params.paramQ), xBeg_(xBeg),
-        xEnd_(xEnd), numPoints_(numPoints) {
+        xEnd_(xEnd), numPoints_(numPoints),
+        concentrateAtEnd_(params.concentrateAtEnd) {
 
-    if (xEnd_ <= xBeg_) {
-      throw std::invalid_argument("xEnd must be greater than xBeg.");
-    }
     if (numPoints_ < 2) {
+      throw std::invalid_argument("numPoints must be at least 2.");
+    }
+
+    if (isEqual(xBeg, xEnd, GEOMETRY_TOLERANCE)) {
       throw std::invalid_argument("numPoints must be at least 2.");
     }
   }
@@ -68,7 +80,7 @@ public:
    * @brief Generates the non-uniformly spaced 1D grid.
    *
    * The stretching function clusters points according to the provided
-   * parameters.
+   * parameters and orientation.
    *
    * @return A vector of node coordinates between xBeg and xEnd.
    */
@@ -76,15 +88,31 @@ public:
     std::vector<double> xnodes;
     xnodes.reserve(numPoints_);
 
+    // Stretching function for parameter s
+    std::vector<double> sValues;
+    sValues.reserve(numPoints_);
+
     for (int i = 0; i < numPoints_; ++i) {
       double eta = static_cast<double>(i) / (numPoints_ - 1);
       double s = (paramP_ * eta) +
                  ((1.0 - paramP_) * (1.0 - std::tanh(paramQ_ * (1.0 - eta)) /
                                                std::tanh(paramQ_)));
-      double x = xBeg_ + ((xEnd_ - xBeg_) * s);
-      xnodes.push_back(x);
+      sValues.push_back(s);
     }
 
+    // Determine direction and concentration logic
+    if (!concentrateAtEnd_) {
+      for (auto &s : sValues) {
+        s = 1.0 - s;
+      }
+      std::ranges::reverse(sValues);
+    }
+
+    // Compute the physical coordinates
+    for (double s : sValues) {
+      double x = xBeg_ + (s * (xEnd_ - xBeg_));
+      xnodes.push_back(x);
+    }
     return xnodes;
   }
 
@@ -98,7 +126,6 @@ public:
     std::vector<double> derivatives;
     derivatives.reserve(numPoints_);
 
-    const double dx = xEnd_ - xBeg_;
     const double tanhQ = std::tanh(paramQ_);
 
     for (int i = 0; i < numPoints_; ++i) {
@@ -106,17 +133,33 @@ public:
       double sechSquared = 1.0 - std::pow(std::tanh(paramQ_ * (1.0 - eta)), 2);
       double ds_deta =
           paramP_ + ((1.0 - paramP_) * paramQ_ * sechSquared / tanhQ);
-      double dx_deta = dx * ds_deta;
-      derivatives.push_back(dx_deta);
+      derivatives.push_back(ds_deta);
+    }
+
+    // Determine direction and concentration logic
+    if (!concentrateAtEnd_) {
+      for (auto &ds_deta : derivatives) {
+        ds_deta *= -1.0;
+      }
+      std::ranges::reverse(derivatives);
+    }
+
+    // Compute the physical derivatives: dx/deta = ds/deta * (xEnd - xBeg)
+    const double dx = xEnd_ - xBeg_;
+    for (auto &ds_deta : derivatives) {
+      ds_deta *= dx;
     }
 
     return derivatives;
   }
 
 private:
-  double paramP_; ///< Blending parameter (linear ↔ nonlinear)
-  double paramQ_; ///< Stretching sharpness
-  double xBeg_;   ///< Start of domain
-  double xEnd_;   ///< End of domain
-  int numPoints_; ///< Number of points to generate
+  double paramP_;         ///< Blending parameter (linear ↔ nonlinear)
+  double paramQ_;         ///< Stretching sharpness
+  double xBeg_;           ///< Start of domain
+  double xEnd_;           ///< End of domain
+  int numPoints_;         ///< Number of points to generate
+  bool concentrateAtEnd_; ///< Extreme where to concentrate the points
 };
+
+} // namespace bem::domain::geometry

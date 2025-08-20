@@ -56,4 +56,99 @@ bool Element::contains(const Point2D &pt, Real tol) const {
 
   return (dot >= -tol) && (dot <= len2 + tol);
 }
+
+std::vector<Real> Element::shapeFunctions(Real xi) const {
+  switch (type) {
+  case ElementType::CONSTANT:
+    return {1.0};
+
+  case ElementType::LINEAR: {
+    // Nodes at xi = -1, +1
+    Real N1 = 0.5 * (1.0 - xi);
+    Real N2 = 0.5 * (1.0 + xi);
+    return {
+        N1,
+        N2,
+    };
+  }
+
+  case ElementType::QUADRATIC: {
+    // Nodes at xi = -1, 0, +1
+    Real N1 = 0.5 * xi * (xi - 1.0);
+    Real N2 = 1.0 - (xi * xi);
+    Real N3 = 0.5 * xi * (xi + 1.0);
+    return {
+        N1,
+        N2,
+        N3,
+    };
+  }
+
+  case ElementType::CUBIC: {
+    // Lagrange interpolation through xi = -1, -1/3, 1/3, 1
+    constexpr Real X1 = -1.0;
+    constexpr Real X2 = -1.0 / 3.0;
+    constexpr Real X3 = 1.0 / 3.0;
+    constexpr Real X4 = 1.0;
+    auto L = [&](Real xi, Real x_i) {
+      Real xs[4] = {X1, X2, X3, X4};
+      Real val = 1.0;
+      for (double x : xs) {
+        if (x != x_i) {
+          val *= (xi - x) / (x_i - x);
+        }
+      }
+      return val;
+    };
+    return {
+        L(xi, X1),
+        L(xi, X2),
+        L(xi, X3),
+        L(xi, X4),
+    };
+  }
+  }
+  return {};
+}
+
+std::vector<Real> Element::shapeFunctionDerivatives(Real xi) const {
+  switch (type) {
+  case ElementType::CONSTANT:
+    return {0.0};
+
+  case ElementType::LINEAR:
+    return {-0.5, 0.5};
+
+  case ElementType::QUADRATIC:
+    return {xi - 0.5, -2.0 * xi, xi + 0.5};
+
+  case ElementType::CUBIC: {
+    constexpr Real X1 = -1.0;
+    constexpr Real X2 = -1.0 / 3.0;
+    constexpr Real X3 = 1.0 / 3.0;
+    constexpr Real X4 = 1.0;
+    auto dL = [&](Real xi, int i) {
+      Real xs[4] = {X1, X2, X3, X4};
+      Real sum = 0.0;
+      for (int m = 0; m < 4; ++m) {
+        if (m == i) {
+          continue;
+        }
+        Real term = 1.0 / (xs[i] - xs[m]);
+        for (int j = 0; j < 4; ++j) {
+          if (j == i || j == m) {
+            continue;
+          }
+          term *= (xi - xs[j]) / (xs[i] - xs[j]);
+        }
+        sum += term;
+      }
+      return sum;
+    };
+    return {dL(xi, 0), dL(xi, 1), dL(xi, 2), dL(xi, 3)};
+  }
+  }
+  return {};
+}
+
 } // namespace bem::types

@@ -33,6 +33,22 @@ struct Element {
   Element(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {
   }
 
+  /**
+   * @brief Evaluate shape functions for a given local coordinate ξ.
+   *
+   * @param xi Local coordinate in [-1, 1]
+   * @return std::vector<Real> Shape function values at ξ
+   */
+  [[nodiscard]] std::vector<Real> shapeFunctions(Real xi) const;
+
+  /**
+   * @brief Evaluate derivatives of shape functions wrt ξ.
+   *
+   * @param xi Local coordinate in [-1, 1]
+   * @return std::vector<Real> Derivatives at ξ
+   */
+  [[nodiscard]] std::vector<Real> shapeFunctionDerivatives(Real xi) const;
+
   [[nodiscard]] Real length() const;
   [[nodiscard]] Point2D midpoint() const;
   [[nodiscard]] Vector2D tangent() const;

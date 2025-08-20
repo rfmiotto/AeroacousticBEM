@@ -1,5 +1,6 @@
 #include "GaussLegendreTable.hpp"
 #include "foundation/exceptions/BEMException.hpp"
+#include <algorithm>
 #include <cmath>
 #include <numbers>
 
@@ -83,6 +84,9 @@ std::vector<QuadraturePoint> GaussLegendreTable::getPoints(int order) {
     throw BEMIntegrationException("Unsupported Gauss-Legendre order: " +
                                   std::to_string(order));
   }
+
+  // Ensure nodes are sorted from left (-1) to right (+1)
+  std::ranges::sort(points, {}, &QuadraturePoint::xi);
 
   return points;
 }

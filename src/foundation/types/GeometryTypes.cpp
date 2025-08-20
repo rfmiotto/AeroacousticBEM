@@ -57,7 +57,7 @@ bool Element::contains(const Point2D &pt, Real tol) const {
   return (dot >= -tol) && (dot <= len2 + tol);
 }
 
-std::vector<Real> Element::shapeFunctions(Real xi) const {
+std::vector<Real> Element::shapeFunction(Real xi) const {
   switch (type) {
   case ElementType::CONSTANT:
     return {1.0};
@@ -111,7 +111,7 @@ std::vector<Real> Element::shapeFunctions(Real xi) const {
   return {};
 }
 
-std::vector<Real> Element::shapeFunctionDerivatives(Real xi) const {
+std::vector<Real> Element::shapeFunctionDerivative(Real xi) const {
   switch (type) {
   case ElementType::CONSTANT:
     return {0.0};

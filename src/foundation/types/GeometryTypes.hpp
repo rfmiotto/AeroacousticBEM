@@ -30,7 +30,11 @@ struct Element {
   ElementType type = ElementType::CONSTANT;
 
   Element() = default;
-  Element(const Point2D &p1, const Point2D &p2) : start(p1), end(p2) {
+  Element(const Point2D &p1,
+          const Point2D &p2,
+          ElementType t = ElementType::CONSTANT,
+          ElementRegion r = ElementRegion::UPSTREAM)
+      : start(p1), end(p2), region(r), type(t) {
   }
 
   /**

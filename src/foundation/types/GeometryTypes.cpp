@@ -4,6 +4,14 @@
 namespace bem::types {
 using namespace bem::foundation::utils::MathUtils;
 
+void Element::setElementRegion(ElementRegion r) {
+  region = r;
+}
+
+ElementRegion Element::getElementRegion() const {
+  return region;
+}
+
 Real Element::length() const {
   return distance(start, end);
 }

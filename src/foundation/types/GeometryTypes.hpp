@@ -53,6 +53,9 @@ struct Element {
    */
   [[nodiscard]] std::vector<Real> shapeFunctionDerivative(Real xi) const;
 
+  void setElementRegion(ElementRegion r);
+  [[nodiscard]] ElementRegion getElementRegion() const;
+
   [[nodiscard]] Real length() const;
   [[nodiscard]] Point2D midpoint() const;
   [[nodiscard]] Vector2D tangent() const;

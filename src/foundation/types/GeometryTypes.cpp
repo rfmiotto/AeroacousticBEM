@@ -65,6 +65,26 @@ bool Element::contains(const Point2D &pt, Real tol) const {
   return (dot >= -tol) && (dot <= len2 + tol);
 }
 
+std::vector<Point2D> Element::getNodes() const {
+  switch (type) {
+  case ElementType::CONSTANT:
+    return {midpoint()};
+
+  case ElementType::LINEAR:
+    return {start, end};
+
+  case ElementType::QUADRATIC:
+    return {start, midpoint(), end};
+
+  case ElementType::CUBIC:
+    return {parametricPoint(-1.0), parametricPoint(-1.0 / 3.0),
+            parametricPoint(1.0 / 3.0), parametricPoint(1.0)};
+
+  default:
+    throw std::runtime_error("Unsupported ElementType in Element::getNodes()");
+  }
+}
+
 std::vector<Real> Element::shapeFunction(Real xi) const {
   switch (type) {
   case ElementType::CONSTANT:

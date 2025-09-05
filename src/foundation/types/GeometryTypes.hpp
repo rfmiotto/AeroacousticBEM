@@ -38,6 +38,17 @@ struct Element {
   }
 
   /**
+   * @brief Return the physical coordinates of this element's interpolation
+   * nodes.
+   *
+   * For CONSTANT:  midpoint
+   * For LINEAR:    start, end
+   * For QUADRATIC: start, midpoint, end
+   * For CUBIC:     nodes at ξ = -1, -1/3, 1/3, 1
+   */
+  [[nodiscard]] std::vector<Point2D> getNodes() const;
+
+  /**
    * @brief Evaluate shape function for a given local coordinate ξ.
    *
    * @param xi Local coordinate in [-1, 1]

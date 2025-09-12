@@ -14,6 +14,7 @@ using bem::types::Complex;
 using bem::types::Point2D;
 using bem::types::Real;
 using bem::types::Vector2D;
+using foundation::utils::Constants::I_4;
 
 Complex hankelFirstKind(int order, const double z) {
   if (isZero(z)) {

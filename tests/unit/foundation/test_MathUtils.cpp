@@ -105,6 +105,15 @@ TEST_F(MathUtilsTest, IsEqualFunction) {
   EXPECT_FALSE(MathUtils::isEqual(1.0, 1.01, 0.005));
 }
 
+TEST_F(MathUtilsTest, pointsEqualFunction) {
+  EXPECT_TRUE(MathUtils::pointsEqual(point1_, point1_));
+  EXPECT_FALSE(MathUtils::pointsEqual(point1_, point2_));
+
+  // Custom tolerance
+  EXPECT_TRUE(MathUtils::pointsEqual(point1_, point3_, 2.0));
+  EXPECT_FALSE(MathUtils::pointsEqual(point1_, point3_, 0.9));
+}
+
 // Test complex number utilities
 TEST_F(MathUtilsTest, ComplexMagnitudeAndPhase) {
   Complex z1{3.0, 4.0};

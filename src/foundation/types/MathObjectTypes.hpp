@@ -30,21 +30,10 @@ struct Point2D {
   }
 
   // Arithmetic operations
-  Point2D operator+(const Point2D &other) const {
-    return {x + other.x, y + other.y};
-  }
-
-  Point2D operator-(const Point2D &other) const {
-    return {x - other.x, y - other.y};
-  }
-
-  Point2D operator*(Real scalar) const {
-    return {x * scalar, y * scalar};
-  }
-
-  Point2D operator/(Real scalar) const {
-    return {x / scalar, y / scalar};
-  }
+  Point2D operator+(const Point2D &other) const;
+  Point2D operator-(const Point2D &other) const;
+  Point2D operator*(Real scalar) const;
+  Point2D operator/(Real scalar) const;
 
   // Comparison operators
   bool operator==(const Point2D &other) const;

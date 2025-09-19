@@ -1,11 +1,9 @@
 #include "foundation/utils/MathUtils.hpp"
 #include "types/MathObjectTypes.hpp"
-#include "utils/Constants.hpp"
 #include <cmath> // For std::sqrt, std::pow, std::atan2, std::abs, std::cyl_bessel_j, std::cyl_neumann
 
 namespace bem::foundation::utils::MathUtils {
 
-using bem::foundation::utils::Constants::GEOMETRY_TOLERANCE;
 using types::Complex;
 using types::Point2D;
 

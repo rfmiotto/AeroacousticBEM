@@ -42,33 +42,4 @@ struct SolverParameters {
   std::string solver_type{"direct"}; // "direct", "gmres", "bicgstab"
 };
 
-// BEM system components
-struct SystemMatrixEntry {
-  ElementId row;
-  ElementId col;
-  Complex value;
-
-  SystemMatrixEntry(ElementId r, ElementId c, Complex v)
-      : row(r), col(c), value(v) {
-  }
-};
-
-// Problem parameters
-struct ProblemParameters {
-  Real frequency{0.0};
-  Real wave_number{0.0};
-};
-
-// Solution at a point
-struct FieldPoint {
-  Point2D location;
-  Complex potential;
-  Complex pressure;  // p = -iωρφ for acoustic problems
-  Vector2D velocity; // v = ∇φ (as complex components)
-
-  FieldPoint() = default;
-  explicit FieldPoint(const Point2D &loc) : location(loc) {
-  }
-};
-
 } // namespace bem::types
